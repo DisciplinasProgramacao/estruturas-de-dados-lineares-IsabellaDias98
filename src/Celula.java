@@ -8,7 +8,7 @@ public class Celula<T> {
 		setProximo(null);
 	}
 
-	public Celula(T item) {
+	public Celula(T item) { // Sentinela
 		this.item = item;
 		setProximo(null);
 	}

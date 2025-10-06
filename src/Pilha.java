@@ -19,10 +19,10 @@ public class Pilha<E> {
 
 	public void empilhar(E item) {
 
-		topo = new Celula<E>(item, topo);
+		topo = new Celula<E>(item, topo); // 3 Processos: criar nova célula, atribuir topo a nova célula, atualizar topo
 	}
 
-	public E desempilhar() {
+	public E desempilhar() { // Remove o elemento do topo e o retorna
 
 		E desempilhado = consultarTopo();
 		topo = topo.getProximo();
@@ -54,7 +54,32 @@ public class Pilha<E> {
 	 */
 	public Pilha<E> subPilha(int numItens) {
 		
-		// TODO
-		return null;
+		if (numItens <= 0) {
+        throw new IllegalArgumentException("O número de itens deve ser maior que zero.");
+		}
+
+		Celula<E> atual = topo;
+		Pilha<E> novaPilha = new Pilha<E>();
+		int contador = 0;
+
+		while (atual != fundo && contador < numItens) {
+			novaPilha.empilhar(atual.getItem());
+			atual = atual.getProximo();
+			contador++;
+		}
+
+		if (contador < numItens) {
+			throw new IllegalArgumentException("A pilha não contém " + numItens + " elementos.");
+		}
+
+		// Inversão da Pilha (Ficar Igual a Original)
+		Pilha<E> pilhaInvertida = new Pilha<E>();
+
+		while (!novaPilha.vazia()) {
+			pilhaInvertida.empilhar(novaPilha.desempilhar());
+		}
+
+		return pilhaInvertida;
+		
 	}
 }

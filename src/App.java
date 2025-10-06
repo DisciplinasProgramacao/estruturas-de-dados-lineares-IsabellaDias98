@@ -1,9 +1,9 @@
-import java.nio.charset.Charset;
-import java.time.LocalDate;
-import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
+import java.time.LocalDate;
+import java.util.Scanner;
 
 public class App {
 
@@ -101,14 +101,14 @@ public class App {
     	} catch (IOException excecaoArquivo) {
     		produtosCadastrados = null;
     	} finally {
-    		arquivo.close();
+            arquivo.close();
     	}
     	
     	return produtosCadastrados;
     }
     
     /** Localiza um produto no vetor de produtos cadastrados, a partir do código de produto informado pelo usuário, e o retorna. 
-     *  Em caso de não encontrar o produto, retorna null 
+     *  Em caso de não encontrar o produto, retorna null
      */
     static Produto localizarProduto() {
         
@@ -125,7 +125,7 @@ public class App {
         	}
         }
         
-        return produto;   
+        return produto;
     }
     
     /** Localiza um produto no vetor de produtos cadastrados, a partir do nome de produto informado pelo usuário, e o retorna. 
@@ -174,7 +174,7 @@ public class App {
         }
     }
     
-    /** 
+    /**
      * Inicia um novo pedido.
      * Permite ao usuário escolher e incluir produtos no pedido.
      * @return O novo pedido
@@ -208,25 +208,53 @@ public class App {
      */
     public static void finalizarPedido(Pedido pedido) {
     	
-    	// TODO
+    	if (pedido == null) {
+    		System.out.println("Nenhum pedido em andamento!");
+    	} else {
+    		pilhaPedidos.empilhar(pedido);
+    		System.out.println("Pedido finalizado com sucesso!");
+    		System.out.println(pedido);
+    	}
     }
     
     public static void listarProdutosPedidosRecentes() {
     	
-    	// TODO
+    	cabecalho();
+        System.out.println("Produtos dos pedidos recentes:");
+
+        if (pilhaPedidos.vazia()) {
+            System.out.println("Não há pedidos cadastrados.");
+            return;
+        }
+
+        int maxPedidos = 5;
+        Pilha<Pedido> aux = new Pilha<>();
+        int count = 0;
+
+        while (!pilhaPedidos.vazia() && count < maxPedidos) {
+            Pedido pedido = pilhaPedidos.desempilhar();
+            System.out.println(pedido);
+            aux.empilhar(pedido);
+            count++;
+        }
+
+        while (!aux.vazia()) {
+            pilhaPedidos.empilhar(aux.desempilhar());
+        }
+
     }
     
 	public static void main(String[] args) {
 		
 		teclado = new Scanner(System.in, Charset.forName("UTF-8"));
         
-		nomeArquivoDados = "produtos.txt";
+		nomeArquivoDados = "C://Users//isabe//OneDrive//Documents//AEDs II//Estruturas de Dados Lineares e Flexíveis//estruturas-de-dados-lineares-IsabellaDias98//src//produtos.txt";
         produtosCadastrados = lerProdutos(nomeArquivoDados);
         
         Pedido pedido = null;
         
         int opcao = -1;
-      
+
         do{
             opcao = menu();
             switch (opcao) {
@@ -238,8 +266,8 @@ public class App {
                 case 6 -> listarProdutosPedidosRecentes();
             }
             pausa();
-        }while(opcao != 0);       
+        }while(opcao != 0);
 
-        teclado.close();    
+        teclado.close();
     }
 }
